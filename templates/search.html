@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+
+  <main role="main" class="container p-0">
+     <h3 class="text-uppercase text-warning" style="letter-spacing: 2px;">search by - {{keyword}}</h3>
+    <div class="row">
+      {% for i in blogs %}
+      <div class="col-md-8 blog-main">
+        <div class="card border-0" >
+        <div class="card-body">
+          <h3><a href="{% url 'search' %}">{{i.title}}</a></h3>
+          <small class="mb-1 text-muted">{{i.create_at | timesince}} ago | {{i.author}}</small>
+          <p class="card-text">{{i.short_description | truncatewords:20}}</p>
+        </div>
+      </div>
+       
+  
+      </div>
+      {% endfor %}
+      <!-- /.blog-main -->
+
+    
+
+    </div><!-- /.row -->
+
+  </main><!-- /.container -->
+
+{% endblock %}
