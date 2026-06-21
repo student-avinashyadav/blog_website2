@@ -1,8 +1,9 @@
 from django.shortcuts import render ,redirect
 from blogs.models import Category,Blogs
 from django.contrib.auth.decorators import login_required
-from dashbords.forms import CategoryForm
+from dashbords.forms import CategoryForm , BlogForm
 from django.shortcuts import get_object_or_404 
+from django.template.defaultfilters import slugify
 # Create your views here.
 @login_required(login_url='login')
 def dashboard(request):
@@ -51,4 +52,51 @@ def delete_category(request,pk):
     category = get_object_or_404(Category,pk=pk)
     category.delete()
     return redirect('categories')
+
+def posts(request):
+    posts = Blogs.objects.all()
+    context = {
+        'posts':posts
+    }
+    return render(request,'dashboard/posts.html',context)
+
+def add_post(request):
+    if request.method=='POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            title = form.cleaned_data['title']
+            post.slug = slugify(title)
+            post.save()
+            
+            print('success')
+            return redirect('posts')
+        else:
+            print(form.errors)
+    else:
+        form = BlogForm()
+    context = {
+        'form':form
+    }
+    return render(request,'dashboard/add_post.html',context)
+
+def delete_post(request,pk):
+    post = get_object_or_404(Blogs,pk=pk)
+    post.delete()
+    return redirect('posts')
   
+def edit_post(request,pk):
+    blog = get_object_or_404(Blogs,pk=pk)
+    if request.method=='POST':
+        form = BlogForm(request.POST , instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('posts')
+    else:
+        form = BlogForm(instance=blog)
+    context = {
+        'form':form,
+        'blog':blog,
+    }
+    return render(request,'dashboard/edit_post.html',context)

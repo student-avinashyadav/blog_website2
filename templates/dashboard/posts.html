@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+
+
+
+{% block content %}
+
+<div class="row">
+    <!-- left sidebar -->
+ <!-- load lefts side bar-->
+ {% include './leftsidebar.html' %}
+<!-- right sidebar -->
+ <div class="col-md-9">
+    <h3>All Posts</h3>
+    <a href="{% url 'add' %}" class="btn btn-warning text-light bg-dark mb-2 float-right">Add New post</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Author</th>
+      <th>Status</th>
+      <th>Feacherd</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for post in posts %}
+    <tr>
+      <th>{{ forloop.counter }}</th>
+      <td>{{ post.title }}</td>
+      <td>{{ post.category }}</td>
+      <td>{{ post.author }}</td>
+      <th>{{ post.status }}</th>
+      <td>{% if post.is_feacherd %} <i class="fa fa-check text-success"></i>{% else %} <i class="fa fa-times text-danger"></i> {% endif %}</td>
+      
+      
+      
+      <td>
+        <a href="{% url 'edit_post' post.id %}"><i class="fa fa-edit text-success"></i> &nbsp;</a>
+        <a href="{% url 'delete_post' post.id %}"><i class="fa fa-trash text-danger"></i></a>
+       
+      
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    
+ </div>
+
+</div>
+
+{% endblock %}
