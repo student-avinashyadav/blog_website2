@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Category , Blogs
+from . models import Category , Blogs ,Comment
 # Register your models here.
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -13,3 +13,5 @@ class BlogAdmin(admin.ModelAdmin):
     search_fields = ('id','title','category__category_name','status')
     list_editable = ('is_feacherd',)
 admin.site.register(Blogs,BlogAdmin)
+
+admin.site.register(Comment)
